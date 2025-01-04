@@ -20,3 +20,4 @@ variable "vpc_tags" {
   default     = {}
   description = "tags de criação"
 }
+
