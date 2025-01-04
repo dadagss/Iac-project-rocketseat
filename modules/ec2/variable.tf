@@ -7,7 +7,7 @@ variable "ec2_instance_name" {
 variable "subnet_id" {
   type        = string
   default     = ""
-  description = "id da VPC"
+  description = "id da subnet"
 }
 
 variable "ec2_tags" {
@@ -16,14 +16,9 @@ variable "ec2_tags" {
   description = "tags de criação"
 }
 
-variable "ec2_id" {
-  type        = string
-  description = "ID da instância EC2"
-}
-
 variable "instance_type" {
   type        = string
   default     = "t2.micro"
-  description = "ID da instância EC2"
+  description = "tipo de instancia"
 }
 

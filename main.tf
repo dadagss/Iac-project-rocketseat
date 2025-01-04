@@ -1,46 +1,56 @@
+locals {
+  environment = terraform.workspace
+}
+
 module "vpc" {
   source   = "./modules/vpc"
   Region   = "us-east-1a"
-  vpc_cidr = "10.0.0.0/16"
+  Region2  = "us-east-1b"
+  vpc_cidr = local.environment == "prod" ? "10.0.0.0/16" : local.environment == "staging" ? "10.1.0.0/16" : "10.2.0.0/16"
   vpc_tags = {
-    Name    = "-VPC-${terraform.workspace}"
+    Name    = "VPC-${local.environment}"
     Iac     = true
-    context = "${terraform.workspace}"
+    context = local.environment
   }
 }
 
 module "ec2" {
-  source            = "./modules/ec2"
-  ec2_instance_name = "batata"
-  ec2_id            = module.ec2.ec2_id
-  instance_type     = "t2.micro"
-  subnet_id         = module.vpc.subnet_id
+  source        = "./modules/ec2"
+  instance_type = local.environment == "prod" ? "t3.medium" : local.environment == "staging" ? "t2.medium" : "t2.micro"
+  subnet_id     = module.vpc.subnet_id
   ec2_tags = {
-    Name    = "-ec2-${terraform.workspace}"
+    Name    = "EC2-${local.environment}"
     Iac     = true
-    context = "${terraform.workspace}"
+    context = local.environment
   }
+  depends_on = [
+    module.vpc
+  ]
 }
 
 module "lb" {
   source            = "./modules/lb"
-  subnet_id         = module.vpc.subnet_id
+  subnet_ids        = module.vpc.subnet_ids
   ec2_id            = module.ec2.ec2_id
   security_group_id = module.lb_sg.security_group_id
   vpc_id            = module.vpc.vpc_id
   lb_tags = {
-    Name       = "LB-${terraform.workspace}"
-    Iac        = true
-    Environment = "dev"
+    Name        = "LB-${local.environment}"
+    Iac         = true
+    Environment = local.environment
   }
+  depends_on = [
+    module.vpc,
+    module.ec2
+  ]
 }
 
 module "lb_sg" {
   source = "./modules/security_group"
   vpc_id = module.vpc.vpc_id
   sg_tags = {
-    Name = "LB-SG-${terraform.workspace}"
-    Iac  = true
-    context = "${terraform.workspace}"
+    Name    = "LB-SG-${local.environment}"
+    Iac     = true
+    context = local.environment
   }
 }

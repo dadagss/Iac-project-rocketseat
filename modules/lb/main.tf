@@ -19,7 +19,7 @@ resource "aws_security_group" "lb_sg" {
 
   tags = {
     Name = "lb-security-group"
-    Iac = true
+    Iac  = true
   }
 }
 
@@ -27,7 +27,7 @@ resource "aws_lb" "rocket" {
   name               = "rocket-lb-tf"
   load_balancer_type = "application"
   security_groups    = [var.security_group_id]
-  subnets            = var.subnet_id
+  subnets            = var.subnet_ids
 
 
   tags = var.lb_tags
@@ -37,7 +37,7 @@ resource "aws_lb_target_group" "rocket" {
   name     = "rocket-tg"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = var.ec2_id
+  vpc_id   = var.vpc_id
 }
 
 resource "aws_lb_target_group_attachment" "rocket" {

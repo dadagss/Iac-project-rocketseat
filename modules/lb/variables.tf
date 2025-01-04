@@ -1,7 +1,7 @@
-variable "subnet_id" {
-  type        = string
-  default     = ""
-  description = "id da VPC"
+variable "subnet_ids" {
+  type        = list(string)
+  default     = []
+  description = "lista de subnets"
 }
 
 variable "ec2_id" {
@@ -23,5 +23,6 @@ variable "security_group_id" {
 
 variable "vpc_id" {
   type        = string
-  description = "ID of the security group for the Load Balancer"
+  default     = ""
+  description = "ID da VPC"
 }

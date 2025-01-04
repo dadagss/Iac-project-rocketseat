@@ -14,6 +14,4 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
-data "aws_instance" "ec2_id" {
-  instance_id = var.ec2_id
-}
+
