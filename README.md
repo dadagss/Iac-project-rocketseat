@@ -65,14 +65,14 @@ git clone https://github.com/dadagss/Iac-project-rocketseat.git
 cd iac-project-rocktseat
 ```
 
-2. Inicialize o Terraform:
-```bash
-terraform init
-```
-
-3. Defina o workspace em que deseja trabalhar:
+2. Defina o workspace em que deseja trabalhar:
 ```bash
 terraform wockspace select dev
+```
+
+3. Inicialize o Terraform:
+```bash
+terraform init
 ```
 
 4. Planeje a infraestrutura:
